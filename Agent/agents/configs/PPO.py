@@ -1,3 +1,4 @@
+import torch.nn as nn
 class PPO():
     @staticmethod
     def get_args(new_args = None):
@@ -6,7 +7,7 @@ class PPO():
         args ={
             "policy": "MlpPolicy",
             "learning_rate": 0.0003,
-            "n_steps": 2048,
+            "n_steps": 4096,
             "batch_size": 64,
             "n_epochs": 10,
             "gamma": 0.99,
@@ -14,7 +15,7 @@ class PPO():
             "clip_range":0.2,
             "clip_range_vf":None,
             "normalize_advantage": True,
-            "ent_coef": 0.0,
+            "ent_coef": 0.01,
             "vf_coef": 0.5,
             "max_grad_norm": 0.5,
             "use_sde": False,

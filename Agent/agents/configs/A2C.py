@@ -6,10 +6,10 @@ class A2C():
         args ={
             "policy": "MlpPolicy",
             "learning_rate": 0.0001,
-            "n_steps": 5,
+            "n_steps": 60,
             "gamma": 0.99,
             "gae_lambda": 1.0,
-            "ent_coef": 0.0,
+            "ent_coef": 0.001,
             "vf_coef": 0.5,
             "max_grad_norm": 0.5,
             "rms_prop_eps": 1e-05,
@@ -31,6 +31,6 @@ class A2C():
     def get_run_args():
         args ={
             "save_interval": 15000,
-            "total_steps": 150000
+            "total_steps": 300000
         }
         return args
