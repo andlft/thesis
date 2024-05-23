@@ -1,3 +1,4 @@
+using Assets.Scripts.Environment.Environment;
 using UnityEngine;
 
 namespace Scripts.Misc
@@ -6,12 +7,22 @@ namespace Scripts.Misc
     {
         public float destructionTime = 1f;
         [Range(0f, 1f)]
-        public float itemSpawnChance = 0.1f;
+        public float itemSpawnChance = 0f;
         public GameObject[] spawnableItems;
 
-        private void Start()
+        public Env env;
+
+        private float fuse;
+        [SerializeField] private float timer;
+
+        private void FixedUpdate()
         {
-            Destroy(gameObject, destructionTime);
+            if (fuse > timer)
+            {
+                Destroy(gameObject);
+            }
+
+            fuse += env.timeMultiplier * env.GetSimulationStep();
         }
 
         private void OnDestroy()

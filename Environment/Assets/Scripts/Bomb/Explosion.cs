@@ -1,5 +1,6 @@
 using UnityEngine;
 using Scripts.Misc;
+using Assets.Scripts.Environment.Environment;
 
 namespace Scripts.Bomb
 {
@@ -8,7 +9,20 @@ namespace Scripts.Bomb
         public AnimatedSpriteRenderer start;
         public AnimatedSpriteRenderer middle;
         public AnimatedSpriteRenderer end;
+        public Env env;
 
+        private float fuse;
+        [SerializeField] private float timer;
+
+        private void FixedUpdate()
+        {
+            if (fuse > timer)
+            {
+                Destroy(gameObject);
+            }
+
+            fuse += env.timeMultiplier * env.GetSimulationStep();
+        }
         public void SetActiveRenderer(AnimatedSpriteRenderer renderer)
         {
             start.enabled = renderer == start;
@@ -22,9 +36,5 @@ namespace Scripts.Bomb
             transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
         }
 
-        public void DestroyAfter(float seconds)
-        {
-            Destroy(gameObject, seconds);
-        }
     }
 }

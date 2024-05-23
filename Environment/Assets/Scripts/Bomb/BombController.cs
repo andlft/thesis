@@ -1,7 +1,7 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Scripts.Misc;
+using Assets.Scripts.Environment.Environment;
 
 namespace Scripts.Bomb
 {
@@ -12,7 +12,7 @@ namespace Scripts.Bomb
         public KeyCode inputKey = KeyCode.Space;
         public float bombFuseTime = 3.0f;
         public int bombAmount = 1;
-        private int bombsRemaining;
+        public int bombsRemaining;
 
         [Header("Explosion")]
         public Explosion explosionPrefab;
@@ -24,6 +24,8 @@ namespace Scripts.Bomb
         public Tilemap destructibleTiles;
         public Destructible destructiblePrefab;
 
+        [SerializeField] Simulation simulation;
+        [SerializeField] Env env;
 
         private void OnEnable()
         {
@@ -32,41 +34,36 @@ namespace Scripts.Bomb
 
         private void Update()
         {
-            if (bombsRemaining > 0 && Input.GetKeyDown(inputKey))
+            if (Input.GetKeyDown(inputKey))
             {
-                StartCoroutine(PlaceBomb());
+                PlaceBomb();
             }
         }
 
-        private IEnumerator PlaceBomb()
+        public void PlaceBomb()
         {
+            if (bombsRemaining <= 0)
+            {
+                return;
+            }
             Vector2 position = transform.position;
             position.x = Mathf.Round(position.x);
             position.y = Mathf.Round(position.y);
 
             GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
+            BombScript bombScript = bomb.GetComponent<BombScript>();
+            bombScript.env = env;
+            bombScript.bombController = this;
+            bombScript.explosionPrefab = explosionPrefab;
+            bombScript.explosionLayerMask = explosionLayerMask;
+            bombScript.destructiblePrefab = destructiblePrefab;
+            bombScript.explosionRadius = explosionRadius;
+            bombScript.explosionDuration = explosionDuration;
             bombsRemaining--;
 
-            yield return new WaitForSeconds(bombFuseTime);
-
-            position = bomb.transform.position;
-            position.x = Mathf.Round(position.x);
-            position.y = Mathf.Round(position.y);
-
-            Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-            explosion.SetActiveRenderer(explosion.start);
-            explosion.DestroyAfter(explosionDuration);
-
-            Explode(position, Vector2.up, explosionRadius);
-            Explode(position, Vector2.down, explosionRadius);
-            Explode(position, Vector2.left, explosionRadius);
-            Explode(position, Vector2.right, explosionRadius);
-
-            Destroy(bomb);
-            bombsRemaining++;
         }
 
-        private void Explode(Vector2 position, Vector2 direction, int length)
+        public void Explode(Vector2 position, Vector2 direction, int length)
         {
             if (length == 0)
             {
@@ -84,8 +81,8 @@ namespace Scripts.Bomb
             Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
             explosion.SetActiveRenderer(length > 1 ? explosion.middle : explosion.end);
             explosion.SetDirection(direction);
-            explosion.DestroyAfter(explosionDuration);
-
+            Explosion explosionScript = explosion.GetComponent<Explosion>();
+            explosionScript.env = env;
             Explode(position, direction, length - 1);
         }
 
@@ -104,14 +101,22 @@ namespace Scripts.Bomb
 
             if (tile != null)
             {
-                Instantiate(destructiblePrefab, position, Quaternion.identity);
+                Destructible destructible = Instantiate(destructiblePrefab, position, Quaternion.identity);
+                Destructible destructibleScript = destructible.GetComponent<Destructible>();
+                destructibleScript.env = env;
                 destructibleTiles.SetTile(cell, null);
+                env.AddReward(0.1f);
             }
         }
 
         public void AddBomb()
         {
             bombAmount++;
+            bombsRemaining++;
+        }
+
+        public void ReturnBomb()
+        {
             bombsRemaining++;
         }
 

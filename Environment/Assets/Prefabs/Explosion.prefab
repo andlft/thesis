@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 728415246609515510}
   m_Layer: 8
   m_Name: Explosion
-  m_TagString: Untagged
+  m_TagString: Explosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,7 +79,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.25}
+  m_Size: {x: 0.3, y: 0.3}
   m_EdgeRadius: 0
 --- !u!114 &728415246609515510
 MonoBehaviour:
@@ -96,6 +96,8 @@ MonoBehaviour:
   start: {fileID: 9013119031149987259}
   middle: {fileID: 7182316861043800501}
   end: {fileID: 472055005473626565}
+  env: {fileID: 0}
+  timer: 0.01
 --- !u!1 &5926983369999340504
 GameObject:
   m_ObjectHideFlags: 0

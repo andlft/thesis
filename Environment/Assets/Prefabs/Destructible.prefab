@@ -169,7 +169,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destructionTime: 1
-  itemSpawnChance: 0.35
+  itemSpawnChance: 0
   spawnableItems:
   - {fileID: 5610339472896768411, guid: 9fff2554701c9dd4eab3d318b919001f, type: 3}
   - {fileID: 17040457661065358, guid: 655acc661dfa46a498889c08e738a9d2, type: 3}
+  env: {fileID: 0}
+  timer: 0

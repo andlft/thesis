@@ -83,14 +83,20 @@ namespace Assets.Scripts.Environment.AgentComms
 
     public class PositionVector
     {
-        public float goalX, goalY, playerX, playerY;
+        public float playerX, playerY, goalX, goalY, bombX, bombY, rayDown, rayUp, rayLeft, rayRight;
 
-        public PositionVector(Vector2 playerPos, Vector2 goalPos)
+        public PositionVector(Vector2 playerPos, Vector2 goalPos, Vector2 bombPos, float[] rays)
         {
-            this.goalX = goalPos.x;
-            this.goalY = goalPos.y;
             this.playerX = playerPos.x;
             this.playerY = playerPos.y;
+            this.goalX = goalPos.x;
+            this.goalY = goalPos.y;
+            this.bombX = bombPos.x;
+            this.bombY = bombPos.y;
+            this.rayDown = rays[0];
+            this.rayUp = rays[1];
+            this.rayLeft = rays[2];
+            this.rayRight = rays[3];
         }
 
     }

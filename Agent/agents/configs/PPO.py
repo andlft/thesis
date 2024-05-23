@@ -34,7 +34,7 @@ class PPO():
     @staticmethod
     def get_run_args():
         args ={
-            "save_interval": 16384,
-            "total_steps": 163840
+            "save_interval": 163840,
+            "total_steps": 2097152
         }
         return args

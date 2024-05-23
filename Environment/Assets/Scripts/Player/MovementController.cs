@@ -21,6 +21,11 @@ namespace Scripts.Player.MovementController
         public AnimatedSpriteRenderer spriteRendererLeft;
         public AnimatedSpriteRenderer spriteRendererRight;
         public AnimatedSpriteRenderer activeSpriteRenderer;
+        [SerializeField] private GameObject upRay;
+        [SerializeField] private GameObject downRay;
+        [SerializeField] private GameObject leftRay;
+        [SerializeField] private GameObject rightRay;
+
         public Simulation simulation;
         public Env env;
 
@@ -84,11 +89,44 @@ namespace Scripts.Player.MovementController
             activeSpriteRenderer.idle = direction == Vector2.zero;
         }
 
+        public float[] CastRays()
+        {
+            RaycastHit2D hitDown = Physics2D.Raycast(
+                downRay.transform.position,
+                -Vector2.up
+                );
+            RaycastHit2D hitUp = Physics2D.Raycast(
+                upRay.transform.position,
+                Vector2.up
+                );
+            RaycastHit2D hitLeft = Physics2D.Raycast(
+                leftRay.transform.position,
+                -Vector2.right
+                );
+            RaycastHit2D hitRight = Physics2D.Raycast(
+                rightRay.transform.position,
+                Vector2.right
+                );
+            //Debug.DrawRay(downRay.transform.position, -Vector2.up * hitDown.distance, Color.red);
+            //Debug.DrawRay(upRay.transform.position, Vector2.up * hitUp.distance, Color.red);
+            //Debug.DrawRay(leftRay.transform.position, -Vector2.right * hitLeft.distance, Color.red);
+            //Debug.DrawRay(rightRay.transform.position, Vector2.right * hitRight.distance, Color.red);
+
+            float[] result = new float[4];
+            result[0] = hitDown.distance;
+            result[1] = hitUp.distance;
+            result[2] = hitLeft.distance;
+            result[3] = hitRight.distance;
+
+            return result;
+        }
+
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Explosion"))
             {
-                env.AddReward(-10);
+                env.AddReward(-1);
                 env.SetFinished(true);
             }
             if (other.CompareTag("Goal"))
