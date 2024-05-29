@@ -29,11 +29,14 @@ namespace Scripts.Player.MovementController
         public Simulation simulation;
         public Env env;
 
+        private int stageLayer;
+
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             activeSpriteRenderer = spriteRendererDown;
             SetDirection(Vector2.zero, activeSpriteRenderer);
+            stageLayer = LayerMask.GetMask("Stage", "Bomb", "Enemy");
         }
 
         private void Update()
@@ -93,20 +96,29 @@ namespace Scripts.Player.MovementController
         {
             RaycastHit2D hitDown = Physics2D.Raycast(
                 downRay.transform.position,
-                -Vector2.up
+                -Vector2.up,
+                Mathf.Infinity,
+                stageLayer
                 );
             RaycastHit2D hitUp = Physics2D.Raycast(
                 upRay.transform.position,
-                Vector2.up
+                Vector2.up,
+                Mathf.Infinity,
+                stageLayer
                 );
             RaycastHit2D hitLeft = Physics2D.Raycast(
                 leftRay.transform.position,
-                -Vector2.right
+                -Vector2.right,
+                Mathf.Infinity,
+                stageLayer
                 );
             RaycastHit2D hitRight = Physics2D.Raycast(
                 rightRay.transform.position,
-                Vector2.right
+                Vector2.right,
+                Mathf.Infinity,
+                stageLayer
                 );
+
             //Debug.DrawRay(downRay.transform.position, -Vector2.up * hitDown.distance, Color.red);
             //Debug.DrawRay(upRay.transform.position, Vector2.up * hitUp.distance, Color.red);
             //Debug.DrawRay(leftRay.transform.position, -Vector2.right * hitLeft.distance, Color.red);
@@ -132,6 +144,11 @@ namespace Scripts.Player.MovementController
             if (other.CompareTag("Goal"))
             {
                 env.AddReward(10);
+                env.SetFinished(true);
+            }
+            if (other.CompareTag("Enemy"))
+            {
+                env.AddReward(-1);
                 env.SetFinished(true);
             }
         }

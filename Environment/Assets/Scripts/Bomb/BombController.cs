@@ -84,6 +84,11 @@ namespace Scripts.Bomb
             Explosion explosionScript = explosion.GetComponent<Explosion>();
             explosionScript.env = env;
             Explode(position, direction, length - 1);
+
+            if (env.walls == 0)
+            {
+                AttemptSpawnGoal(new Vector2(0.0f, 0.0f));
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -105,7 +110,26 @@ namespace Scripts.Bomb
                 Destructible destructibleScript = destructible.GetComponent<Destructible>();
                 destructibleScript.env = env;
                 destructibleTiles.SetTile(cell, null);
-                env.AddReward(0.1f);
+                env.AddReward(0.5f);
+                if (!env.goalPresent)
+                {
+                    AttemptSpawnGoal(position);
+                }
+                env.walls--;
+            }
+        }
+
+        private void AttemptSpawnGoal(Vector2 position)
+        {
+            float goalSpawnChance = (float)(env.initalWalls - env.walls) / (float)env.initalWalls;
+            float randVal = Random.value;
+            Debug.Log("" + randVal + "<" + goalSpawnChance + "?");
+            float destSpawnChance = (float)env.currentStepsCL / (float)env.totalStepsCL;
+            if (randVal < goalSpawnChance * goalSpawnChance) // + 0.05 * (1 - Mathf.Clamp(destSpawnChance, 0.0f, 1.0f)))
+            {
+                env.goal.transform.position = new Vector3(position.x, position.y, 0);
+                env.goalPresent = true;
+                env.AddReward(1.0f);
             }
         }
 

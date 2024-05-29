@@ -12,6 +12,10 @@ class position_vector:
     rayUp: float
     rayLeft: float
     rayRight: float
+    enemy1X: float
+    enemy1Y: float
+    enemy2X: float
+    enemy2Y: float
 
 @dataclass
 class env_result:

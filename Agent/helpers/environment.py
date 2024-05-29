@@ -11,7 +11,7 @@ class BombermanEnv(Env):
     def __init__(self, unity_comms: UnityComms):
         self.unity_comms = unity_comms
         self.action_space = spaces.Discrete(6)
-        self.observation_space = spaces.Box(low= -np.inf, high= np.inf, shape=(10,), dtype=np.float32)
+        self.observation_space = spaces.Box(low= -np.inf, high= np.inf, shape=(14,), dtype=np.float32)
 
     def step(self, action: NDArray[np.uint8]) -> Tuple[NDArray[np.float32], float, bool, dict[str, Any]]:
         action_str = [
@@ -43,4 +43,8 @@ class BombermanEnv(Env):
             result.rayUp,
             result.rayLeft,
             result.rayRight,
+            result.enemy1X,
+            result.enemy1Y,
+            result.enemy2X,
+            result.enemy2Y,
             ], dtype=np.float32)

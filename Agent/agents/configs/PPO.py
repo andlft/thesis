@@ -6,8 +6,8 @@ class PPO():
             new_args = {}
         args ={
             "policy": "MlpPolicy",
-            "learning_rate": 0.0003,
-            "n_steps": 4096,
+            "learning_rate": 0.0001,
+            "n_steps": 8192,
             "batch_size": 64,
             "n_epochs": 10,
             "gamma": 0.99,
@@ -24,7 +24,13 @@ class PPO():
             "rollout_buffer_kwargs": None,
             "target_kl": None,
             "stats_window_size": 100,
-            "policy_kwargs": None,
+            "policy_kwargs": dict(
+                activation_fn=nn.ReLU,
+                net_arch=dict(
+                    pi=[256, 256],
+                    vf=[256, 256]
+                    )
+                ),
             "seed": None, 
             "_init_setup_model": True
         }
@@ -35,6 +41,6 @@ class PPO():
     def get_run_args():
         args ={
             "save_interval": 163840,
-            "total_steps": 2097152
+            "total_steps": 8388608
         }
         return args

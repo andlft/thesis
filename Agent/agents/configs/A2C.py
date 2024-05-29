@@ -22,13 +22,7 @@ class A2C():
             "rollout_buffer_kwargs": None,
             "normalize_advantage": False,
             "stats_window_size": 100,
-            "policy_kwargs":  dict(
-                activation_fn=nn.ReLU,
-                net_arch=dict(
-                    pi=[256, 256],
-                    vf=[256, 256]
-                    )
-                ),
+            "policy_kwargs":  None,
             "seed": None, 
             "_init_setup_model": True
         }
